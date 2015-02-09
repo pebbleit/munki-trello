@@ -114,9 +114,9 @@ o.add_option("--to-test-list", default=DEFAULT_TO_TEST_LIST,
     help=("Name of the 'To Testing' Trello list. Defaults to '%s'. "
               % DEFAULT_TO_TEST_LIST))
 
-o.add_option("--test-list", default=DEFAULT_TO_TEST_LIST,
+o.add_option("--test-list", default=DEFAULT_TEST_LIST,
     help=("Name of the 'Testing' Trello list. Defaults to '%s'. "
-              % DEFAULT_TO_TEST_LIST))
+              % DEFAULT_TEST_LIST))
 
 o.add_option("--to-prod-list", default=DEFAULT_TO_PROD_LIST,
     help=("Name of the 'To Production' Trello list. Defaults to '%s'. "
@@ -249,6 +249,7 @@ for card in to_production:
 
 # Move cards in to_testing to testing. Update the pkginfo
 for card in to_testing:
+    print card
     app_name, version = get_app_version(card['id'])
     done = False
     for root, dirs, files in os.walk(os.path.join(MUNKI_PATH,'pkgsinfo'), topdown=False):
@@ -257,8 +258,8 @@ for card in to_testing:
             plist = None
             try:
                 plist = plistlib.readPlist(os.path.join(root, name))
-            except:
-                pass
+            except Exception as e:
+                print "Problem reading %s. Error: %s" % (os.path.join(root, name), e)
             
             if plist and plist['name'] == app_name and plist['version'] == version:
                 plist['catalogs'] = ['testing']
