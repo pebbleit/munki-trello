@@ -1,12 +1,20 @@
 # Introduction
 
-This is a script that utilises a Trello board to manage the promotion of Munki items through development to testing to production catalogs. 
+This is a script that utilises a Trello board to manage the promotion of Munki items through development to testing to production catalogs.  You should make five lists on your Trello board:
+
+* To Development: Items placed in this list will be moved to the development catalog when the script next runs.
+* Development: Items in here are in the Development list. Do not place items directly in here, the script will manage the addition / removal of items to the list.
+* To Testing: Items placed in this list will be moved to the testing catalog when the script next runs.
+* Testing: Items here are in testing.
+* To Production: Items here will be moved into production on the next run.
+
+When items are moved into production, they are moved to a dated list, so you have a history of when items were placed into production. One list will be made per day.
 
 # Usage
 
 ## Setup
 
-It's recommended that this script is run under a service Trello account rather than a real persons, so you can separate the changes made by the script from normal users. This user will need to have access to the Trello board you're using. You will need to know the board ID - the board ID is the part after ``/b`` and before the name of your board (https://trello.com/b/_AbCdEfGh_/my-trello-board)
+It is recommended that this script is run under a service Trello account rather than a real persons, so you can separate the changes made by the script from normal users. This user will need to have access to the Trello board you're using. You will need to know the board ID - the board ID is the part after ``/b`` and before the name of your board (with a URL or https://trello.com/b/AbCdEfGh/my-trello-board, __AbCdEfGh__ would be the board ID.)
 
 You will need an [API key](https://trello.com/app-key). Make note of the key and then head over to [Trello's instructions](https://trello.com/docs/gettingstarted/#token) for creating a user token. Choose how long you want to issue to token for - using the value of 'never' will stop the token from expiring. The only required option is read and write access to the Trello account. The name can be anything you like, it's how you will identify the token in future.
 
@@ -23,7 +31,22 @@ You have two options - you can run the script manually on a machine with the Mun
 ### Example
 
 ```
-$ python munki-trello.py --boardid 12345 --key myverylongkey --token myevenlongertoken
+$ python munki-trello.py --boardid 12345 --key myverylongkey --token myevenlongertoken --repo-path /Volumes/my-repo
+```
+
+### Options
+
+* ``--boardid``: Required. The ID of your Trello board.
+* ``--key``: Required. Your Trello API key.
+* ``--token``: Required. Your Trello User Token.
+* ``--to-dev-list``: Optional. The name of your 'To Development' list. Defaults to ``To Development``.
+* ``--dev-list``: Optional. The name of your 'Development' list. Defaults to ``Development``.
+* ``--to-test-list``: Optional. The name of your 'To Testing' list. Defaults to ``To Testing``.
+* ``--test-list``: Optional. The name of your 'Testing' list. Defaults to ``Testing``.
+* ``--to-prod-list``: Optional. The name of your 'To Production' list. Defaults to ``To Production``.
+* ``--suffix``: The suffix that will be put after the dated 'Production' lists. Defaults to ``Production``.
+* ``--repo-path``: The path to your Munki repository. Defaults to ``/Volumes/Munki``.
+* ``--makecatalogs``: The path to ``makecatalogs``. Defaults to ``/usr/local/munki/makecatalogs``.
 
 # Troubleshooting
 
