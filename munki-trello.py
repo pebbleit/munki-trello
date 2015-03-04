@@ -256,7 +256,7 @@ for card in to_production:
                 pass
             
             if plist and plist['name'] == app_name and plist['version'] == version:
-                plist['catalogs'] = PROD_CATALOG
+                plist['catalogs'] = [PROD_CATALOG]
 
                 plistlib.writePlist(plist, os.path.join(root, name))
                 trello.cards.update_idList(card['id'], new_list['id'])
@@ -281,7 +281,7 @@ for card in to_testing:
                 print "Problem reading %s. Error: %s" % (os.path.join(root, name), e)
             
             if plist and plist['name'] == app_name and plist['version'] == version:
-                plist['catalogs'] = TEST_CATALOG
+                plist['catalogs'] = [TEST_CATALOG]
 
                 plistlib.writePlist(plist, os.path.join(root, name))
                 trello.cards.update_idList(card['id'], test_id)
@@ -305,7 +305,7 @@ for card in to_development:
                 pass
             
             if plist and plist['name'] == app_name and plist['version'] == version:
-                plist['catalogs'] = DEV_CATALOG
+                plist['catalogs'] = [DEV_CATALOG]
 
                 plistlib.writePlist(plist, os.path.join(root, name))
                 trello.cards.update_idList(card['id'], dev_id)
