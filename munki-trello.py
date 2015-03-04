@@ -19,7 +19,7 @@ DEFAULT_MUNKI_PATH = "/Volumes/Munki"
 DEFAULT_MAKECATALOGS = "/usr/local/munki/makecatalogs"
 DEFAULT_MUNKI_DEV_CATALOG = "development"
 DEFAULT_MUNKI_TEST_CATALOG = "testing"
-DEFAULT_MUNKI_PROD_CATALOG = "standard"
+DEFAULT_MUNKI_PROD_CATALOG = "production"
 
 
 def fail(message):
