@@ -17,6 +17,10 @@ DEFAULT_TO_PROD_LIST = "To Production"
 DEFAULT_PRODUCTION_SUFFIX = "Production"
 DEFAULT_MUNKI_PATH = "/Volumes/Munki"
 DEFAULT_MAKECATALOGS = "/usr/local/munki/makecatalogs"
+DEFAULT_MUNKI_DEV_CATALOG = "development"
+DEFAULT_MUNKI_TEST_CATALOG = "testing"
+DEFAULT_MUNKI_PROD_CATALOG = "production"
+
 
 def fail(message):
     sys.stderr.write(message)
@@ -126,6 +130,18 @@ o.add_option("--suffix", default=DEFAULT_PRODUCTION_SUFFIX,
     help=("Suffix that will be added to new 'In Production cards'. Defaults to '%s'. "
               % DEFAULT_PRODUCTION_SUFFIX))
 
+o.add_option("--dev-catalog", default=DEFAULT_MUNKI_DEV_CATALOG,
+    help=("Name of the Munki development catalog. Defaults to '%s'. "
+              % DEFAULT_MUNKI_DEV_CATALOG))
+
+o.add_option("--test-catalog", default=DEFAULT_MUNKI_TEST_CATALOG,
+    help=("Name of the Munki testing catalog. Defaults to '%s'. "
+              % DEFAULT_MUNKI_TEST_CATALOG))
+
+o.add_option("--prod-catalog", default=DEFAULT_MUNKI_PROD_CATALOG,
+    help=("Name of the Munki production catalog. Defaults to '%s'. "
+              % DEFAULT_MUNKI_PROD_CATALOG))
+
 o.add_option("--repo-path", default=DEFAULT_MUNKI_PATH,
     help=("Path to your Munki repository. Defaults to '%s'. "
               % DEFAULT_MUNKI_PATH))
@@ -147,6 +163,9 @@ DEV_LIST = opts.dev_list
 TO_TEST_LIST = opts.to_test_list
 TEST_LIST = opts.test_list
 TO_PROD_LIST = opts.to_prod_list
+DEV_CATALOG = opts.dev_catalog
+TEST_CATALOG = opts.test_catalog
+PROD_CATALOG = opts.prod_catalog
 PRODUCTION_SUFFIX = opts.suffix
 MUNKI_PATH = opts.repo_path
 MAKECATALOGS = opts.makecatalogs
@@ -197,11 +216,11 @@ for item in missing:
     name = item['name'] + ' '+item['version']
     comment = '**System Info**\nName: %s\nVersion: %s' % (item['name'], item['version'])
     for catalog in item['catalogs']:
-        if catalog == 'testing':
+        if catalog == TEST_CATALOG:
             card = trello.lists.new_card(test_id, name)
             trello.cards.new_action_comment(card['id'], comment)
 
-        if catalog == 'development':
+        if catalog == DEV_CATALOG:
             card = trello.lists.new_card(dev_id, name)
             trello.cards.new_action_comment(card['id'], comment)
 
@@ -237,7 +256,7 @@ for card in to_production:
                 pass
             
             if plist and plist['name'] == app_name and plist['version'] == version:
-                plist['catalogs'] = ['production']
+                plist['catalogs'] = [PROD_CATALOG]
 
                 plistlib.writePlist(plist, os.path.join(root, name))
                 trello.cards.update_idList(card['id'], new_list['id'])
@@ -262,7 +281,7 @@ for card in to_testing:
                 print "Problem reading %s. Error: %s" % (os.path.join(root, name), e)
             
             if plist and plist['name'] == app_name and plist['version'] == version:
-                plist['catalogs'] = ['testing']
+                plist['catalogs'] = [TEST_CATALOG]
 
                 plistlib.writePlist(plist, os.path.join(root, name))
                 trello.cards.update_idList(card['id'], test_id)
@@ -286,7 +305,7 @@ for card in to_development:
                 pass
             
             if plist and plist['name'] == app_name and plist['version'] == version:
-                plist['catalogs'] = ['development']
+                plist['catalogs'] = [DEV_CATALOG]
 
                 plistlib.writePlist(plist, os.path.join(root, name))
                 trello.cards.update_idList(card['id'], dev_id)
