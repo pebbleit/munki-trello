@@ -24,6 +24,12 @@ https://trello.com/1/authorize?key=substitutewithyourapplicationkey&name=munki-t
 
 You will be given a 64 character string that you will need to take note of.
 
+You will also need to install the trello module:
+
+```
+$ sudo easy install trello
+```
+
 ## Running the script
 
 You have two options - you can run the script manually on a machine with the Munki Tools installed (this will run on OS X or Linux, Windows isn't tested), or you can use the [Docker container](https://github.com/pebbleit/docker-munki-trello). For more details about the Docker container, see it's [own repository](https://github.com/pebbleit/docker-munki-trello) and it's entry on the [Docker Hub](https://registry.hub.docker.com/u/pebbleit/munki-trello/).
